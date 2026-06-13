@@ -83,14 +83,31 @@ pairs(dati[, 2:ncol(dati)],
 dev.off() 
 
 print("Immagini generate con successo. Il problema delle lunghezze è stato aggirato!")
-# --- MODELLO 1: Includiamo tutto (Saturazione con ridondanza x5-x7) ---
-print("--- STIMA MODELLO 1 (TUTTI I REGRESSORI + QUADRATICO x7) ---")
-modello_1 <- lm(y_IQ ~ x1_ISO + x2_T + x3_MP + x4_CF + x5_F + x6_GSI + x7_UA + I(x7_UA^2), data = dati)
-summary(modello_1)
+# In questo punto definiamo formalmente le strutture dei modelli che vogliamo 
+# testare. Usiamo l'operatore I() per indicare a R di calcolare i termini quadratici 
+# (elevati al quadrato) emersi dall'analisi precedente.
+
+# --- MODELLO A: Modello puramente Lineare (Benchmark) ---
+# Ipotizza che tutti e 7 i regressori abbiano un impatto esclusivamente lineare.
+formula_Modello_A <- y_IQ ~ x1_ISO + x2_T + x3_MP + x4_CF + x5_F + x6_GSI + x7_UA
 
 
-# --- MODELLO 2: Rimuoviamo x5 e x4 (Evitiamo la ridondanza deterministica) ---
-print("--- STIMA MODELLO 2 (STRUTTURALE - SENZA RIDONDANZA) ---")
-modello_2 <- lm(y_IQ ~ x1_ISO + x2_T + x3_MP + x6_GSI + x7_UA + I(x7_UA^2), data = dati)
-summary(modello_2)
+# --- MODELLO B: Modello Strutturale Parsimonioso (Scelta del Gruppo) ---
+# Include i regressori significativi, esclude le ridondanze hardware (x4 e x5)
+# e include l'effetto parabolico dell'altezza di volo (x7^2).
+formula_Modello_B <- y_IQ ~ x1_ISO + x2_T + x3_MP + x6_GSI + x7_UA + I(x7_UA^2)
+
+
+# --- MODELLO C: Modello Polinomiale Esteso ---
+# Include TUTTI i termini quadratici che nella tabella descrittiva univariata 
+# (pag. 6 della relazione) erano risultati significativi (x2^2, x6^2, x7^2),
+# mantenendo anche gli altri regressori per verificarne l'effetto combinato.
+formula_Modello_C <- y_IQ ~ x1_ISO + x2_T + I(x2_T^2) + x3_MP + x4_CF + x5_F + x6_GSI + I(x6_GSI^2) + x7_UA + I(x7_UA^2)
+
+
+# Stampa di verifica per confermare la corretta memorizzazione delle formule
+print("--- Formule dei Modelli Definite con Successo ---")
+print(formula_Modello_A)
+print(formula_Modello_B)
+print(formula_Modello_C)
 
