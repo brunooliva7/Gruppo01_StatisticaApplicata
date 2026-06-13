@@ -3,7 +3,7 @@
 
 library(corrplot)
 
-dati <- dati <- read.csv(file.choose())
+dati <-  read.csv(file.choose())
 
 #1 : Analisi Preliminare, statistica Descrittiva e Analisi di Correlazione
 
@@ -22,7 +22,7 @@ windows(width = 14, height = 7)
 par(mfrow=c(2,4))           
 vars <- names(dati)         
 for(i in 1:length(vars)) {                 
-  boxplot(dati[[i]], main=vars[i], col=, varwidth=TRUE, notch=TRUE) 
+  boxplot(dati[[i]], main=vars[i], col="lightblue", varwidth=TRUE, notch=TRUE) 
 }
 par(mfrow=c(1,1))
 dev.off()
@@ -43,7 +43,7 @@ corrplot.mixed(cor_matrix,
                tl.pos = "lt",    # Posiziona le etichette di testo
                number.cex = 0.9, # Grandezza dei numeri
                tl.col = "black") # Colore del testo
-
+#GENERAZIONE PRIMO FILE SCATTER SEMPLICE 
 png("Scatter_X_vs_Y.png", width = 1200, height = 600, res = 120)
 
 par(mfrow = c(2, 4)) 
@@ -58,6 +58,11 @@ for(i in 2:ncol(dati)) {
        xlab = names(dati)[i],            # Usa in automatico il nome della colonna i
        ylab = names(dati)[1],            # Usa in automatico il nome della colonna 1
        main = paste(names(dati)[1], "vs", names(dati)[i]))
+  # 2. Calcola la retta di regressione lineare semplice per questa specifica colonna
+  modello_semplice <- lm(dati[, 1] ~ dati[, i])
+  
+  # 3. Disegna la linea rossa sopra il grafico corrente prima di passare al successivo
+  abline(modello_semplice, col = "red", lwd = 2)
 }
 
 par(mfrow = c(1, 1)) 
@@ -78,3 +83,5 @@ pairs(dati[, 2:ncol(dati)],
 dev.off() 
 
 print("Immagini generate con successo. Il problema delle lunghezze è stato aggirato!")
+
+
