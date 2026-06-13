@@ -83,5 +83,14 @@ pairs(dati[, 2:ncol(dati)],
 dev.off() 
 
 print("Immagini generate con successo. Il problema delle lunghezze è stato aggirato!")
+# --- MODELLO 1: Includiamo tutto (Saturazione con ridondanza x5-x7) ---
+print("--- STIMA MODELLO 1 (TUTTI I REGRESSORI + QUADRATICO x7) ---")
+modello_1 <- lm(y_IQ ~ x1_ISO + x2_T + x3_MP + x4_CF + x5_F + x6_GSI + x7_UA + I(x7_UA^2), data = dati)
+summary(modello_1)
 
+
+# --- MODELLO 2: Rimuoviamo x5 e x4 (Evitiamo la ridondanza deterministica) ---
+print("--- STIMA MODELLO 2 (STRUTTURALE - SENZA RIDONDANZA) ---")
+modello_2 <- lm(y_IQ ~ x1_ISO + x2_T + x3_MP + x6_GSI + x7_UA + I(x7_UA^2), data = dati)
+summary(modello_2)
 
