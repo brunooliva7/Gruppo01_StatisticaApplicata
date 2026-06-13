@@ -72,9 +72,7 @@ png("Scatter_X_vs_X.png", width = 1000, height = 1000, res = 120)
 # Incrocia solo le colonne da 2 all'ultima
 pairs(dati[, 2:ncol(dati)], 
       pch = 15,                          
-      col = rgb(1, 0, 0, 0.4),           
-      main = "Verifica Disegno Sperimentale ortogonale (X vs X)")
+      col = rgb(1, 0, 0, 0.4))
 
 dev.off() 
 
-print("Immagini generate con successo. Il problema delle lunghezze è stato aggirato!")
