@@ -3,7 +3,7 @@
 
 library(corrplot)
 
-dati <-  read.csv(file.choose())
+dati <- dati <- read.csv(file.choose())
 
 #1 : Analisi Preliminare, statistica Descrittiva e Analisi di Correlazione
 
@@ -22,7 +22,7 @@ windows(width = 14, height = 7)
 par(mfrow=c(2,4))           
 vars <- names(dati)         
 for(i in 1:length(vars)) {                 
-  boxplot(dati[[i]], main=vars[i], col="lightblue", varwidth=TRUE, notch=TRUE) 
+  boxplot(dati[[i]], main=vars[i], col=, varwidth=TRUE, notch=TRUE) 
 }
 par(mfrow=c(1,1))
 dev.off()
@@ -43,7 +43,7 @@ corrplot.mixed(cor_matrix,
                tl.pos = "lt",    # Posiziona le etichette di testo
                number.cex = 0.9, # Grandezza dei numeri
                tl.col = "black") # Colore del testo
-#GENERAZIONE PRIMO FILE SCATTER SEMPLICE 
+
 png("Scatter_X_vs_Y.png", width = 1200, height = 600, res = 120)
 
 par(mfrow = c(2, 4)) 
@@ -58,11 +58,6 @@ for(i in 2:ncol(dati)) {
        xlab = names(dati)[i],            # Usa in automatico il nome della colonna i
        ylab = names(dati)[1],            # Usa in automatico il nome della colonna 1
        main = paste(names(dati)[1], "vs", names(dati)[i]))
-  # 2. Calcola la retta di regressione lineare semplice per questa specifica colonna
-  modello_semplice <- lm(dati[, 1] ~ dati[, i])
-  
-  # 3. Disegna la linea rossa sopra il grafico corrente prima di passare al successivo
-  abline(modello_semplice, col = "red", lwd = 2)
 }
 
 par(mfrow = c(1, 1)) 
@@ -81,9 +76,45 @@ pairs(dati[, 2:ncol(dati)],
 
 dev.off() 
 
-<<<<<<< HEAD
-=======
-print("Immagini generate con successo. Il problema delle lunghezze è stato aggirato!")
+# ==============================================================================
+# PUNTO 2b: VERIFICA STATISTICA DELLA REGRESSIONE POLINOMIALE (Y vs X e X^2)
+# ==============================================================================
+
+# Creiamo una tabella vuota per salvare i risultati
+tabella_poli <- data.frame(
+  Variabile = character(),
+  R_quadro = numeric(),
+  P_value_Lineare = numeric(),
+  P_value_Quadratico = numeric(),
+  Curva_Significativa = character()
+)
+
+# Ciclo sulle variabili indipendenti (colonne da 2 a 8)
+for(i in 2:8) {
+  x_name <- names(dati)[i]
+  X_var <- dati[, i]
+  Y_var <- dati$y_IQ
+  
+  # Calcolo del modello polinomiale di grado 2
+  modello_poli <- lm(Y_var ~ X_var + I(X_var^2))
+  sommario <- summary(modello_poli)
+  
+  # Estrazione dei p-value (il p-value del termine X^2 è nella riga 3, colonna 4)
+  pval_lin <- sommario$coefficients[2, 4]
+  pval_quad <- sommario$coefficients[3, 4]
+  
+  # Aggiungiamo i risultati alla tabella
+  tabella_poli <- rbind(tabella_poli, data.frame(
+    Variabile = x_name,
+    R_quadro = round(sommario$r.squared, 4),
+    P_value_Lineare = round(pval_lin, 4),
+    P_value_Quadratico = round(pval_quad, 4),
+    Curva_Significativa = ifelse(pval_quad < 0.05, "SI", "NO") # Test al 5%
+  ))
+}
+
+# Stampiamo la tabella finale sulla console
+print("--- RISULTATI REGRESSIONE POLINOMIALE (GRADO 2) ---")
+print(tabella_poli)
 
 
->>>>>>> 68b05ff1054c35675df735866d484a3500641188
