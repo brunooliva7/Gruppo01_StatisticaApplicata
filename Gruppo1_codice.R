@@ -3,7 +3,6 @@
 
 library(corrplot)
 
-setwd("C:/Users/bruno/Desktop/Gruppo1_StatisticaApplicata/Dataset_N1.csv")
 dati <- dati <- read.csv(file.choose())
 
 #1 : Analisi Preliminare, statistica Descrittiva e Analisi di Correlazione
@@ -27,7 +26,9 @@ for(i in 1:length(vars)) {
 }
 par(mfrow=c(1,1))
 dev.off()
-#1.2 Analisi di Correlazione
+
+print("ANALISI DI CORRELAZIONE")
+
 cor_matrix <- cor(dati)
 
 round(cor_matrix, 2)
@@ -43,31 +44,37 @@ corrplot.mixed(cor_matrix,
                number.cex = 0.9, # Grandezza dei numeri
                tl.col = "black") # Colore del testo
 
-# ==============================================================================
-# STEP 3 CORRETTO: SCATTER PLOT (X vs Y)
-# ==============================================================================
-graphics.off() 
+png("Scatter_X_vs_Y.png", width = 1200, height = 600, res = 120)
 
-# 1. Crea un file PNG gigante nella tua cartella documenti/lavoro
-png("Miei_Scatter_Plot.png", width = 1600, height = 800, res = 120)
+par(mfrow = c(2, 4)) 
 
-# 2. Imposta la griglia
-par(mfrow = c(2, 4), mar = c(4, 4, 3, 1))
-nomi_x <- names(dati)[-1] 
-
-# 3. Disegna (invisibilmente, dentro il file)
-for(variabile in nomi_x) {
-  plot(dati[[variabile]], dati$y, 
-       main = paste("y vs", variabile), 
-       xlab = variabile, 
-       ylab = "y", 
-       pch = 16, 
-       col = adjustcolor("darkblue", alpha.f = 0.5))
-  
-  abline(lm(dati$y ~ dati[[variabile]]), col = "red", lwd = 2)
+# Ciclo che va dalla colonna 2 alla colonna 8 (le tue X)
+for(i in 2:ncol(dati)) {
+  # dati[, i] prende i valori della colonna X attuale
+  # dati[, 1] prende i valori della colonna Y (la prima)
+  plot(dati[, i], dati[, 1], 
+       pch = 19,                         
+       col = rgb(0, 0, 1, 0.5),          
+       xlab = names(dati)[i],            # Usa in automatico il nome della colonna i
+       ylab = names(dati)[1],            # Usa in automatico il nome della colonna 1
+       main = paste(names(dati)[1], "vs", names(dati)[i]))
 }
 
-# 4. SALVA E CHIUDE IL FILE (Fondamentale!)
+par(mfrow = c(1, 1)) 
 dev.off() 
 
-cat("Finito! Cerca il file 'Miei_Scatter_Plot.png' sul tuo PC!\n")
+
+# ------------------------------------------------------------------------------
+# IMMAGINE 2: X vs X 
+# ------------------------------------------------------------------------------
+png("Scatter_X_vs_X.png", width = 1000, height = 1000, res = 120)
+
+# Incrocia solo le colonne da 2 all'ultima
+pairs(dati[, 2:ncol(dati)], 
+      pch = 15,                          
+      col = rgb(1, 0, 0, 0.4),           
+      main = "Verifica Disegno Sperimentale ortogonale (X vs X)")
+
+dev.off() 
+
+print("Immagini generate con successo. Il problema delle lunghezze è stato aggirato!")
