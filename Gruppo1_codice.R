@@ -3,7 +3,7 @@
 
 library(corrplot)
 
-dati <- dati <- read.csv(file.choose())
+dati <- read.csv(file.choose())
 
 #1 : Analisi Preliminare, statistica Descrittiva e Analisi di Correlazione
 
