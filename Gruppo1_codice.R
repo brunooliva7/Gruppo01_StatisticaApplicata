@@ -115,3 +115,22 @@ print(formula_Modello_A)
 print(formula_Modello_B)
 print(formula_Modello_C)
 
+print("====================================================================")
+print("--- PUNTO 4: STIMA EMPIRICA DEI MODELLI E INTERVALLI DI CONFIDENZA ---")
+print("====================================================================")
+
+# 4.1 Esecuzione della stima OLS per i tre modelli candidati
+stima_Modello_A <- lm(formula_Modello_A, data = dati)
+stima_Modello_B <- lm(formula_Modello_B, data = dati)
+stima_Modello_C <- lm(formula_Modello_C, data = dati)
+
+# 4.2 Visualizzazione dei Summary per il confronto metrico
+print("--- STIMA COMPLETA: MODELLO A (LINEARE BASE) ---")
+print(summary(stima_Modello_A))
+
+print("--- STIMA COMPLETA: MODELLO B (STRUTTURALE OPT - SCELTA GRUPPO) ---")
+summary_B <- summary(stima_Modello_B)
+print(summary_B)
+
+print("--- STIMA COMPLETA: MODELLO C (POLINOMIALE ESTESO) ---")
+print(summary_C <- summary(stima_Modello_C))
