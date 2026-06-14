@@ -3,7 +3,11 @@
 
 library(corrplot)
 
+<<<<<<< HEAD
 dati <- read.csv(file.choose())
+=======
+dati <-  read.csv(file.choose())
+>>>>>>> 20669ace2417ea4d6783aeff8bb2e750c8dc20dc
 
 #1 : Analisi Preliminare, statistica Descrittiva e Analisi di Correlazione
 
@@ -22,7 +26,7 @@ windows(width = 14, height = 7)
 par(mfrow=c(2,4))           
 vars <- names(dati)         
 for(i in 1:length(vars)) {                 
-  boxplot(dati[[i]], main=vars[i], col=, varwidth=TRUE, notch=TRUE) 
+  boxplot(dati[[i]], main=vars[i], col="lightblue", varwidth=TRUE, notch=TRUE) 
 }
 par(mfrow=c(1,1))
 dev.off()
@@ -43,7 +47,7 @@ corrplot.mixed(cor_matrix,
                tl.pos = "lt",    # Posiziona le etichette di testo
                number.cex = 0.9, # Grandezza dei numeri
                tl.col = "black") # Colore del testo
-
+#GENERAZIONE PRIMO FILE SCATTER SEMPLICE 
 png("Scatter_X_vs_Y.png", width = 1200, height = 600, res = 120)
 
 par(mfrow = c(2, 4)) 
@@ -58,6 +62,11 @@ for(i in 2:ncol(dati)) {
        xlab = names(dati)[i],            # Usa in automatico il nome della colonna i
        ylab = names(dati)[1],            # Usa in automatico il nome della colonna 1
        main = paste(names(dati)[1], "vs", names(dati)[i]))
+  # 2. Calcola la retta di regressione lineare semplice per questa specifica colonna
+  modello_semplice <- lm(dati[, 1] ~ dati[, i])
+  
+  # 3. Disegna la linea rossa sopra il grafico corrente prima di passare al successivo
+  abline(modello_semplice, col = "red", lwd = 2)
 }
 
 par(mfrow = c(1, 1)) 
@@ -72,49 +81,37 @@ png("Scatter_X_vs_X.png", width = 1000, height = 1000, res = 120)
 # Incrocia solo le colonne da 2 all'ultima
 pairs(dati[, 2:ncol(dati)], 
       pch = 15,                          
-      col = rgb(1, 0, 0, 0.4))
+      col = rgb(1, 0, 0, 0.4),           
+      main = "Verifica Disegno Sperimentale ortogonale (X vs X)")
 
 dev.off() 
 
-# ==============================================================================
-# PUNTO 2b: VERIFICA STATISTICA DELLA REGRESSIONE POLINOMIALE (Y vs X e X^2)
-# ==============================================================================
+print("Immagini generate con successo. Il problema delle lunghezze è stato aggirato!")
+# In questo punto definiamo formalmente le strutture dei modelli che vogliamo 
+# testare. Usiamo l'operatore I() per indicare a R di calcolare i termini quadratici 
+# (elevati al quadrato) emersi dall'analisi precedente.
 
-# Creiamo una tabella vuota per salvare i risultati
-tabella_poli <- data.frame(
-  Variabile = character(),
-  R_quadro = numeric(),
-  P_value_Lineare = numeric(),
-  P_value_Quadratico = numeric(),
-  Curva_Significativa = character()
-)
+# --- MODELLO A: Modello puramente Lineare (Benchmark) ---
+# Ipotizza che tutti e 7 i regressori abbiano un impatto esclusivamente lineare.
+formula_Modello_A <- y_IQ ~ x1_ISO + x2_T + x3_MP + x4_CF + x5_F + x6_GSI + x7_UA
 
-# Ciclo sulle variabili indipendenti (colonne da 2 a 8)
-for(i in 2:8) {
-  x_name <- names(dati)[i]
-  X_var <- dati[, i]
-  Y_var <- dati$y_IQ
-  
-  # Calcolo del modello polinomiale di grado 2
-  modello_poli <- lm(Y_var ~ X_var + I(X_var^2))
-  sommario <- summary(modello_poli)
-  
-  # Estrazione dei p-value (il p-value del termine X^2 è nella riga 3, colonna 4)
-  pval_lin <- sommario$coefficients[2, 4]
-  pval_quad <- sommario$coefficients[3, 4]
-  
-  # Aggiungiamo i risultati alla tabella
-  tabella_poli <- rbind(tabella_poli, data.frame(
-    Variabile = x_name,
-    R_quadro = round(sommario$r.squared, 4),
-    P_value_Lineare = round(pval_lin, 4),
-    P_value_Quadratico = round(pval_quad, 4),
-    Curva_Significativa = ifelse(pval_quad < 0.05, "SI", "NO") # Test al 5%
-  ))
-}
 
-# Stampiamo la tabella finale sulla console
-print("--- RISULTATI REGRESSIONE POLINOMIALE (GRADO 2) ---")
-print(tabella_poli)
+# --- MODELLO B: Modello Strutturale Parsimonioso (Scelta del Gruppo) ---
+# Include i regressori significativi, esclude le ridondanze hardware (x4 e x5)
+# e include l'effetto parabolico dell'altezza di volo (x7^2).
+formula_Modello_B <- y_IQ ~ x1_ISO + x2_T + x3_MP + x6_GSI + x7_UA + I(x7_UA^2)
 
+
+# --- MODELLO C: Modello Polinomiale Esteso ---
+# Include TUTTI i termini quadratici che nella tabella descrittiva univariata 
+# (pag. 6 della relazione) erano risultati significativi (x2^2, x6^2, x7^2),
+# mantenendo anche gli altri regressori per verificarne l'effetto combinato.
+formula_Modello_C <- y_IQ ~ x1_ISO + x2_T + I(x2_T^2) + x3_MP + x4_CF + x5_F + x6_GSI + I(x6_GSI^2) + x7_UA + I(x7_UA^2)
+
+
+# Stampa di verifica per confermare la corretta memorizzazione delle formule
+print("--- Formule dei Modelli Definite con Successo ---")
+print(formula_Modello_A)
+print(formula_Modello_B)
+print(formula_Modello_C)
 
