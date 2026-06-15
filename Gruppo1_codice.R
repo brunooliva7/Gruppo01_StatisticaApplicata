@@ -3,11 +3,8 @@
 
 library(corrplot)
 
-<<<<<<< HEAD
 dati <- read.csv(file.choose())
-=======
-dati <-  read.csv(file.choose())
->>>>>>> 20669ace2417ea4d6783aeff8bb2e750c8dc20dc
+
 
 #1 : Analisi Preliminare, statistica Descrittiva e Analisi di Correlazione
 
