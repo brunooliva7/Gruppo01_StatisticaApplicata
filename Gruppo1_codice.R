@@ -104,9 +104,15 @@ formula_Modello_B <- y_IQ ~ x1_ISO + x2_T + x3_MP + x6_GSI + x7_UA + I(x7_UA^2)
 
 # --- MODELLO C: Modello Polinomiale Esteso ---
 # Include TUTTI i termini quadratici che nella tabella descrittiva univariata 
-# (pag. 6 della relazione) erano risultati significativi (x2^2, x6^2, x7^2),
-# mantenendo anche gli altri regressori per verificarne l'effetto combinato.
 formula_Modello_C <- y_IQ ~ x1_ISO + x2_T + I(x2_T^2) + x3_MP + x4_CF + x5_F + x6_GSI + I(x6_GSI^2) + x7_UA + I(x7_UA^2)
+
+
+#MODELLO D---: incluse le curve quadratiche ma esclusa la ridondanza 
+formula_Modello_D <- y_IQ ~ x1_ISO + x2_T + I(x2_T^2) + x3_MP + x4_CF + x6_GSI + I(x6_GSI^2) + x7_UA + I(x7_UA^2)
+
+
+#MODELLO E----: proviamo ad inserire x5 invece di x4 
+formula_Modello_E <- y_IQ ~ x1_ISO + x2_T + I(x2_T^2) + x3_MP + x5_F + x6_GSI + I(x6_GSI^2) + x7_UA + I(x7_UA^2)
 
 
 # Stampa di verifica per confermare la corretta memorizzazione delle formule
@@ -114,6 +120,8 @@ print("--- Formule dei Modelli Definite con Successo ---")
 print(formula_Modello_A)
 print(formula_Modello_B)
 print(formula_Modello_C)
+print(formula_Modello_D)
+print(formula_Modello_E)
 
 print("====================================================================")
 print("--- PUNTO 4: STIMA EMPIRICA DEI MODELLI E INTERVALLI DI CONFIDENZA ---")
@@ -123,6 +131,8 @@ print("====================================================================")
 stima_Modello_A <- lm(formula_Modello_A, data = dati)
 stima_Modello_B <- lm(formula_Modello_B, data = dati)
 stima_Modello_C <- lm(formula_Modello_C, data = dati)
+stima_Modello_D <- lm(formula_Modello_D, data = dati)
+stima_Modello_E <- lm(formula_Modello_E, data = dati)
 
 # 4.2 Visualizzazione dei Summary per il confronto metrico
 print("--- STIMA COMPLETA: MODELLO A (LINEARE BASE) ---")
@@ -134,3 +144,34 @@ print(summary_B)
 
 print("--- STIMA COMPLETA: MODELLO C (POLINOMIALE ESTESO) ---")
 print(summary_C <- summary(stima_Modello_C))
+
+print("--- STIMA COMPLETA: MODELLO D (POLINOMIALE SENZA CORRELAZIONI) ---")
+print(summary_D <- summary(stima_Modello_D))
+
+print("--- STIMA COMPLETA: MODELLO E (CON FOCALE, SENZA CROP FACTOR) ---")
+print(summary(stima_Modello_E))
+
+#--CONFRONTO TRAMITE BIC E AIC PER TROVARE IL MODELLO MIGLIORE----
+# Estrazione dell'AIC per tutti i modelli candidati
+aic_valori <- c(
+  Modello_A = AIC(stima_Modello_A),
+  Modello_B = AIC(stima_Modello_B),
+  Modello_C = AIC(stima_Modello_C),
+  Modello_D = AIC(stima_Modello_D),
+  Modello_E = AIC(stima_Modello_E)
+)
+#Estrazione del BIC per tutti i modelli candidati
+bic_valori <- c(
+  Modello_A = BIC(stima_Modello_A),
+  Modello_B = BIC(stima_Modello_B),
+  Modello_C = BIC(stima_Modello_C),
+  Modello_D = BIC(stima_Modello_D),
+  Modello_E = BIC(stima_Modello_E)
+)
+
+print("--- VALORI AIC (Il modello migliore ha il valore più BASSO) ---")
+print(round(aic_valori, 2))
+
+print("--- VALORI BIC (Il modello migliore ha il valore più BASSO) ---")
+print(round(bic_valori, 2))
+
