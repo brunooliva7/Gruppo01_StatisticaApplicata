@@ -194,6 +194,7 @@ print(confint(stima_Modello_E, level = 0.95))
 
 print("=== FINE PUNTO 4 ===")
 
+
 # ====================================================================
 # --- PUNTO 5: COEFFICIENTE DI DETERMINAZIONE E DIAGNOSTICA DEI RESIDUI ---
 # ====================================================================
@@ -232,5 +233,3 @@ par(mfrow = c(1, 1)) # Ripristina la finestra grafica standard
 dev.off()
 
 print("Grafici diagnostici salvati con successo in 'Diagnostica_Residui_Modello_D.png'")
-
-
