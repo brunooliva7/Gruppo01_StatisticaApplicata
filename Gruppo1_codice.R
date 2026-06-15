@@ -172,3 +172,24 @@ print(round(aic_valori, 2))
 print("--- VALORI BIC (Il modello migliore ha il valore più BASSO) ---")
 print(round(bic_valori, 2))
 
+# 4.4 DETERMINAZIONE DEGLI INTERVALLI DI CONFIDENZA DEI PARAMETRI (95%)
+print("====================================================================")
+print("--- DETERMINAZIONE INTERVALLI DI CONFIDENZA (LIVELLO 0.95) ---")
+print("====================================================================")
+
+print("--- INTERVALLI DI CONFIDENZA - MODELLO A ---")
+print(confint(stima_Modello_A, level = 0.95))
+
+print("--- INTERVALLI DI CONFIDENZA - MODELLO B ---")
+print(confint(stima_Modello_B, level = 0.95))
+
+print("--- INTERVALLI DI CONFIDENZA - MODELLO C ---")
+print(confint(stima_Modello_C, level = 0.95))
+
+print("--- INTERVALLI DI CONFIDENZA - MODELLO D ---")
+print(confint(stima_Modello_D, level = 0.95))
+
+print("--- INTERVALLI DI CONFIDENZA - MODELLO E ---")
+print(confint(stima_Modello_E, level = 0.95))
+
+print("=== FINE PUNTO 4 ===")
