@@ -193,3 +193,44 @@ print("--- INTERVALLI DI CONFIDENZA - MODELLO E ---")
 print(confint(stima_Modello_E, level = 0.95))
 
 print("=== FINE PUNTO 4 ===")
+
+# ====================================================================
+# --- PUNTO 5: COEFFICIENTE DI DETERMINAZIONE E DIAGNOSTICA DEI RESIDUI ---
+# ====================================================================
+
+# 5.1 Estrazione e confronto del Coefficiente di Determinazione
+# Creiamo una tabella riassuntiva dei modelli principali
+r_squared_valori <- c(
+  Modello_A = summary(stima_Modello_A)$r.squared,
+  Modello_B = summary(stima_Modello_B)$r.squared,
+  Modello_D = summary(stima_Modello_D)$r.squared
+)
+
+adj_r_squared_valori <- c(
+  Modello_A = summary(stima_Modello_A)$adj.r.squared,
+  Modello_B = summary(stima_Modello_B)$adj.r.squared,
+  Modello_D = summary(stima_Modello_D)$adj.r.squared
+)
+
+print("--- Multiple R-squared ---")
+print(round(r_squared_valori, 4))
+
+print("--- Adjusted R-squared (OTTIMALE PER IL CONFRONTO) ---")
+print(round(adj_r_squared_valori, 4))
+
+# 5.2 Grafici Diagnostici sui Residui del Modello Scelto (es. Modello D)
+# Il comando plot() su un oggetto 'lm' genera automaticamente 4 grafici.
+
+print("Generazione dei grafici diagnostici per il Modello D...")
+png("Diagnostica_Residui_Modello_D.png", width = 1000, height = 800, res = 120)
+
+par(mfrow = c(2, 2)) # Divide la finestra grafica in una griglia 2x2
+
+plot(stima_Modello_D) # Genera i 4 plot diagnostici standard
+
+par(mfrow = c(1, 1)) # Ripristina la finestra grafica standard
+dev.off()
+
+print("Grafici diagnostici salvati con successo in 'Diagnostica_Residui_Modello_D.png'")
+
+
