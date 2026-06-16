@@ -285,3 +285,28 @@ plot(stima_Modello_E)
 par(mfrow = c(1, 1)) 
 dev.off()
 print("Grafici diagnostici salvati con successo in 'Diagnostica_Residui_Modello_E.png'")
+
+print("--- Esecuzione Regressione Stepwise (Backward) ---")
+
+# Eseguiamo l'algoritmo partendo dal Modello C
+# direction = "backward" impone a R di partire da questo modello "pieno" e procedere per sottrazione
+modello_stepwise_backward <- step(stima_Modello_C, direction = "backward")
+
+print("--- Risultato Modello Ottimale Scelto dalla Stepwise ---")
+# Visualizziamo le statistiche del modello "vincitore"
+summary(modello_stepwise_backward)
+
+print("--- Esecuzione Regressione Stepwise (Forward) ---")
+
+# 1. Definiamo il modello base "vuoto" (solo intercetta)
+modello_base <- lm(y_IQ ~ 1, data = dati) # Assicurati che il nome del dataframe sia corretto
+
+# 2. Eseguiamo la stepwise in avanti
+# scope = list(...) dice all'algoritmo il recinto in cui può muoversi:
+# dal modello vuoto fino alla formula completa del Modello C
+modello_stepwise_forward <- step(modello_base, 
+                                 scope = list(lower = modello_base, upper = formula(stima_Modello_C)), 
+                                 direction = "forward")
+
+print("--- Risultato Modello Ottimale Scelto dalla Stepwise Forward ---")
+summary(modello_stepwise_forward)
