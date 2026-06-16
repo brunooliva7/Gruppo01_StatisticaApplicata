@@ -204,20 +204,24 @@ print("=== FINE PUNTO 4 ===")
 r_squared_valori <- c(
   Modello_A = summary(stima_Modello_A)$r.squared,
   Modello_B = summary(stima_Modello_B)$r.squared,
-  Modello_D = summary(stima_Modello_D)$r.squared
+  Modello_C = summary(stima_Modello_B)$r.squared,
+  Modello_D = summary(stima_Modello_D)$r.squared,
+  Modello_E = summary(stima_Modello_B)$r.squared
 )
 
 adj_r_squared_valori <- c(
   Modello_A = summary(stima_Modello_A)$adj.r.squared,
   Modello_B = summary(stima_Modello_B)$adj.r.squared,
-  Modello_D = summary(stima_Modello_D)$adj.r.squared
+  Modello_C = summary(stima_Modello_B)$adj.r.squared,
+  Modello_D = summary(stima_Modello_D)$adj.r.squared,
+  Modello_E = summary(stima_Modello_B)$adj.r.squared
 )
 
 print("--- Multiple R-squared ---")
-print(round(r_squared_valori, 4))
+print(round(r_squared_valori, 5))
 
 print("--- Adjusted R-squared (OTTIMALE PER IL CONFRONTO) ---")
-print(round(adj_r_squared_valori, 4))
+print(round(adj_r_squared_valori, 5))
 
 # 5.2 Grafici Diagnostici sui Residui del Modello Scelto (es. Modello D)
 # Il comando plot() su un oggetto 'lm' genera automaticamente 4 grafici.
