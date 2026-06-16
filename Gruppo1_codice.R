@@ -226,14 +226,62 @@ print(round(adj_r_squared_valori, 5))
 # 5.2 Grafici Diagnostici sui Residui del Modello Scelto (es. Modello D)
 # Il comando plot() su un oggetto 'lm' genera automaticamente 4 grafici.
 
+# --- Diagnostica Modello A ---
+print("Generazione dei grafici diagnostici per il Modello A...")
+png("Diagnostica_Residui_Modello_A.png", width = 1000, height = 800, res = 120)
+
+par(mfrow = c(2, 2)) 
+plot(stima_Modello_A) 
+
+par(mfrow = c(1, 1)) 
+dev.off()
+print("Grafici diagnostici salvati con successo in 'Diagnostica_Residui_Modello_A.png'")
+
+
+# --- Diagnostica Modello B ---
+print("Generazione dei grafici diagnostici per il Modello B...")
+png("Diagnostica_Residui_Modello_B.png", width = 1000, height = 800, res = 120)
+
+par(mfrow = c(2, 2)) 
+plot(stima_Modello_B) 
+
+par(mfrow = c(1, 1)) 
+dev.off()
+print("Grafici diagnostici salvati con successo in 'Diagnostica_Residui_Modello_B.png'")
+
+
+# --- Diagnostica Modello C ---
+print("Generazione dei grafici diagnostici per il Modello C...")
+png("Diagnostica_Residui_Modello_C.png", width = 1000, height = 800, res = 120)
+
+par(mfrow = c(2, 2)) 
+plot(stima_Modello_C) 
+
+par(mfrow = c(1, 1)) 
+dev.off()
+print("Grafici diagnostici salvati con successo in 'Diagnostica_Residui_Modello_C.png'")
+
+#--- Diagnostica Modello D ---
 print("Generazione dei grafici diagnostici per il Modello D...")
+
 png("Diagnostica_Residui_Modello_D.png", width = 1000, height = 800, res = 120)
-
 par(mfrow = c(2, 2)) # Divide la finestra grafica in una griglia 2x2
-
 plot(stima_Modello_D) # Genera i 4 plot diagnostici standard
-
 par(mfrow = c(1, 1)) # Ripristina la finestra grafica standard
 dev.off()
 
+
 print("Grafici diagnostici salvati con successo in 'Diagnostica_Residui_Modello_D.png'")
+
+
+
+# --- Diagnostica Modello E ---
+print("Generazione dei grafici diagnostici per il Modello E...")
+png("Diagnostica_Residui_Modello_E.png", width = 1000, height = 800, res = 120)
+
+par(mfrow = c(2, 2)) 
+plot(stima_Modello_E) 
+
+par(mfrow = c(1, 1)) 
+dev.off()
+print("Grafici diagnostici salvati con successo in 'Diagnostica_Residui_Modello_E.png'")
