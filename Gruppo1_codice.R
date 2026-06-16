@@ -296,6 +296,9 @@ print("--- Risultato Modello Ottimale Scelto dalla Stepwise ---")
 # Visualizziamo le statistiche del modello "vincitore"
 summary(modello_stepwise_backward)
 
+print("AIC del modello Backward:")
+AIC(modello_stepwise_backward)
+
 print("--- Esecuzione Regressione Stepwise (Forward) ---")
 
 # 1. Definiamo il modello base "vuoto" (solo intercetta)
@@ -310,3 +313,6 @@ modello_stepwise_forward <- step(modello_base,
 
 print("--- Risultato Modello Ottimale Scelto dalla Stepwise Forward ---")
 summary(modello_stepwise_forward)
+
+print("AIC del modello Forward:")
+AIC(modello_stepwise_forward)
